@@ -1,0 +1,27 @@
+.ant-card-type-inner .ant-card-head {
+    background: lightblue;
+    padding: 5px;
+    min-width: 150px;
+}
+
+.ant-card-type-inner .ant-card-body {
+    background: lightblue;
+    padding: 5px
+}
+
+.ant-card-head {
+    padding: 5px;
+    min-width: 150px;
+}
+
+.ant-card-body {
+    padding: 5px
+}
+
+.ant-tree-node-content-wrapper.ant-tree-node-selected .ant-card.ant-card-bordered {
+    border: 0;
+}
+
+.ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+    background-color: lightblue;
+}

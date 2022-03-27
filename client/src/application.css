@@ -1,0 +1,10 @@
+.ant-divider-vertical {
+    position: relative;
+    top: -0.06em;
+    display: inline-block;
+    height: 100vh;
+    margin: 0 8px;
+    vertical-align: middle;
+    border-top: 0;
+    border-left: 4px solid #f0f0f0;
+}
