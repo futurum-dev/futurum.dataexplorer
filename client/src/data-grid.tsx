@@ -9,7 +9,7 @@ import {FilterValue, SorterResult, TableCurrentDataSource, TablePaginationConfig
 import './data-grid.css'
 import {InteractiveDataComponentProps} from "./interactive-data";
 
-const DataGrid = ({loading, rowData, allColumns, columnDefinitions, columnDrilldown, middleDrilldown} : InteractiveDataComponentProps) => {
+const DataGrid = ({loading, rowData, allColumns, columnDefinitions, columnDrilldown, middleDrilldown}: InteractiveDataComponentProps) => {
     const [popup, setPopup] = useState<{ visible: boolean, x: number, y: number }>({visible: false, x: 0, y: 0});
 
     const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
@@ -26,11 +26,9 @@ const DataGrid = ({loading, rowData, allColumns, columnDefinitions, columnDrilld
 
             const doubleClickedRowData = rowData.filter(row => row.key === rowIndex)[0];
 
-            if(doubleClickedRowData[column] !== "middle"){
+            if (doubleClickedRowData[column] !== "middle") {
                 return;
             }
-
-            console.log('middle drilldown (double-click):' + column);
 
             const filter: DrillDownPathNodeFilter = {
                 filterColumn: column,
@@ -52,7 +50,7 @@ const DataGrid = ({loading, rowData, allColumns, columnDefinitions, columnDrilld
             const anyMiddleRows = rowData.filter(row => [...selectedRowKeys, rowIndex].includes(row.key))
                 .filter(row => row[filterColumn] === "middle");
 
-            if(anyMiddleRows.length > 0){
+            if (anyMiddleRows.length > 0) {
                 return;
             }
 
@@ -87,29 +85,15 @@ const DataGrid = ({loading, rowData, allColumns, columnDefinitions, columnDrilld
     };
 
     const columnDrillDown = (column: string) => {
-        console.log('drilldown:' + column);
-
         const filterColumn = columnDefinitions[0].title;
 
         function createFilter(): DrillDownPathNodeFilter {
             if (selectedRowKeys.length === 1) {
-                const columnValue = rowData[selectedRowKeys[0]][filterColumn];
-
-                if (columnValue !== "middle") {
-                    return {
-                        filterColumn: filterColumn,
-                        filterValues: [rowData[selectedRowKeys[0]][filterColumn]],
-                        type: "EQUALS"
-                    };
-                } else {
-                    return {
-                        filterColumn: filterColumn,
-                        filterValues: rowData.filter(row => row[filterColumn] !== "middle").map(row => {
-                            return rowData[row.key][filterColumn];
-                        }),
-                        type: "NOT_IN"
-                    };
-                }
+                return {
+                    filterColumn: filterColumn,
+                    filterValues: [rowData[selectedRowKeys[0]][filterColumn]],
+                    type: "EQUALS"
+                };
             } else {
                 return {
                     filterColumn: filterColumn,
@@ -132,10 +116,6 @@ const DataGrid = ({loading, rowData, allColumns, columnDefinitions, columnDrilld
 
     const onChange = (pagination: TablePaginationConfig, filters: Record<string, FilterValue | null>, sorter: SorterResult<any> | SorterResult<any>[], extra: TableCurrentDataSource<any>): void => {
         console.log('params', pagination, filters, sorter, extra);
-    }
-
-    if (selectedRowKeys) {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
     }
 
     return (

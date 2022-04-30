@@ -8,10 +8,10 @@ import {useAppDispatch, useAppSelector} from "./hooks";
 import {addChildNode, updateNodeTopBottomRange} from "./drill-down-tree-slice";
 import {DrillDownPathNode, DrillDownPathNodeFilter} from "./domain";
 import DataTopBottomSlider from "./data-top-bottom-slider";
-
-import './data-grid.css'
 import DataGrid from "./data-grid";
 import DataChart from "./data-chart";
+
+import './data-grid.css'
 
 const {TabPane} = Tabs;
 

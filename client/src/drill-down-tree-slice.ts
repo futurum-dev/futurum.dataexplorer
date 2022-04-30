@@ -2,19 +2,14 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
 import {v4 as uuidv4} from 'uuid';
 
-import type {RootState} from './store'
 import {DrillDownPathNode, TopBottomRange} from "./domain";
 
-// Define a type for the slice state
 interface DrillDownPathState {
-    value: number,
     nodes: DrillDownPathNode[],
     selectedNodeId: string | null
 }
 
-// Define the initial state using that type
 const initialState: DrillDownPathState = {
-    value: 0,
     nodes: [{
         id: uuidv4(),
         title: "Root",
@@ -28,19 +23,8 @@ const initialState: DrillDownPathState = {
 
 export const drillDownPathSlice = createSlice({
     name: 'drill-down-path',
-    // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
-        increment: (state) => {
-            state.value += 1
-        },
-        decrement: (state) => {
-            state.value -= 1
-        },
-        // Use the PayloadAction type to declare the contents of `action.payload`
-        incrementByAmount: (state, action: PayloadAction<number>) => {
-            state.value += action.payload
-        },
         selectNode: (state, action: PayloadAction<DrillDownPathNode>) => {
             state.selectedNodeId = action.payload.id
         },
@@ -84,9 +68,6 @@ function searchNodes(element: DrillDownPathNode, matchingId: string): DrillDownP
     return null;
 }
 
-export const {increment, decrement, incrementByAmount, selectNode, addChildNode, updateNodeTopBottomRange} = drillDownPathSlice.actions
-
-// Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.drillDownPath.value
+export const {selectNode, addChildNode, updateNodeTopBottomRange} = drillDownPathSlice.actions
 
 export default drillDownPathSlice.reducer

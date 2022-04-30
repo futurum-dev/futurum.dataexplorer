@@ -7,7 +7,7 @@ import {DataNode, EventDataNode} from 'antd/lib/tree';
 import {CardType} from "antd/lib/card";
 
 import {useAppDispatch, useAppSelector} from "./hooks";
-import {decrement, increment, selectNode} from "./drill-down-tree-slice";
+import {selectNode} from "./drill-down-tree-slice";
 import {DrillDownPathNode} from "./domain";
 
 import './drill-down-tree.css'
@@ -20,7 +20,6 @@ interface TreeNodeData {
 type TreeNode = DataNode & TreeNodeData;
 
 export default function DrillDownTree() {
-    const count = useAppSelector((state) => state.drillDownPath.value)
     const nodes = useAppSelector((state) => state.drillDownPath.nodes)
     const selectedNodeId = useAppSelector((state) => state.drillDownPath.selectedNodeId)
     const dispatch = useAppDispatch()
@@ -75,21 +74,6 @@ export default function DrillDownTree() {
 
     return (
         <>
-            <div>
-                <button
-                    aria-label="Increment value"
-                    onClick={() => dispatch(increment())}
-                >
-                    Increment
-                </button>
-                <span>{count}</span>
-                <button
-                    aria-label="Decrement value"
-                    onClick={() => dispatch(decrement())}
-                >
-                    Decrement
-                </button>
-            </div>
             <Tree
                 treeData={treeData}
                 selectedKeys={[selectedKey]}
