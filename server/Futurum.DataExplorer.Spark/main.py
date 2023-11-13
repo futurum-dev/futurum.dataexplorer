@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Depends, Request, status
 from fastapi.logger import logger
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
@@ -26,11 +26,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-sc = SparkContext('local')
-spark = SparkSession(sc)
-
-df = spark.read.option("header", "true").option("inferSchema", "true").csv("result.csv")
 
 
 class FilterType(str, Enum):
@@ -64,6 +59,19 @@ def register_exception(app: FastAPI):
         return JSONResponse(content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
+def get_spark_session():
+    spark = SparkSession.builder.master("local[*]").appName("Futurum.DataExplorer").getOrCreate()
+    try:
+        yield spark
+    finally:
+        spark.stop()
+
+
+def get_dataframe(spark: SparkSession):
+    df = spark.read.option("header", "true").option("inferSchema", "true").csv("result.csv")
+    return df
+
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -75,22 +83,26 @@ async def say_hello(name: str):
 
 
 @app.get("/data")
-async def data():
+async def data(spark: SparkSession = Depends(get_spark_session)):
+    df = get_dataframe(spark)
     return df.toJSON().collect()
 
 
 @app.get("/data/count")
-async def data():
+async def data(spark: SparkSession = Depends(get_spark_session)):
+    df = get_dataframe(spark)
     return df.count()
 
 
 @app.get("/data/schema")
-async def data():
+async def data(spark: SparkSession = Depends(get_spark_session)):
+    df = get_dataframe(spark)
     return df.schema.json()
 
 
 @app.get("/data/query1")
-async def data():
+async def data(spark: SparkSession = Depends(get_spark_session)):
+    df = get_dataframe(spark)
     finalDataframe = df.groupby("country", "year").count().orderBy("country", "year")
     sparkData = finalDataframe.toJSON().collect()
     return {
@@ -101,7 +113,8 @@ async def data():
 
 
 @app.get("/data/query/{column}")
-async def data(column: str):
+async def data(column: str, spark: SparkSession = Depends(get_spark_session)):
+    df = get_dataframe(spark)
     finalDataframe = df.groupby(column).count().orderBy(column)
     sparkData = finalDataframe.toJSON().collect()
     return {
@@ -112,7 +125,8 @@ async def data(column: str):
 
 
 @app.get("/data/filteredQuery/{column}")
-async def dataWithFilter(column: str, filterColumn: str, filterValue: str):
+async def dataWithFilter(column: str, filterColumn: str, filterValue: str, spark: SparkSession = Depends(get_spark_session)):
+    df = get_dataframe(spark)
     finalDataframe = df.filter(filterColumn + "=='" + filterValue + "'").groupby(column).count().orderBy(column)
     sparkData = finalDataframe.toJSON().collect()
     return {
@@ -123,7 +137,8 @@ async def dataWithFilter(column: str, filterColumn: str, filterValue: str):
 
 
 @app.get("/data/query2/{athlete}")
-async def data(athlete: str):
+async def data(athlete: str, spark: SparkSession = Depends(get_spark_session)):
+    df = get_dataframe(spark)
     finalDataframe = df.filter(col("athlete") == f"{athlete}").groupby("country").count()
     sparkData = finalDataframe.toJSON().collect()
     return {
@@ -134,7 +149,8 @@ async def data(athlete: str):
 
 
 @app.post("/data/query3")
-async def data(query: Query):
+async def data(query: Query, spark: SparkSession = Depends(get_spark_session)):
+    df = get_dataframe(spark)
     working_dataframe = df
     final_dataframe = df
 
