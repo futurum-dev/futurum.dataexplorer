@@ -146,12 +146,12 @@ async def data(query: Query):
         elif filter.type == 'notInFilter':
             working_dataframe = working_dataframe.filter(filter.column + " not in (" + ",".join(map(lambda value: "'" + value + "'", filter.values)) + ")")
 
-    if (query.drilledColumn):
+    if query.drilledColumn:
         working_dataframe = working_dataframe.groupby(query.drilledColumn).sum('gold', 'silver', 'bronze', 'total').orderBy('sum(gold)', 'sum(silver)', 'sum(bronze)', 'sum(total)')
 
     original_count = working_dataframe.count()
 
-    if (query.top > 0 and query.bottom < original_count):
+    if query.top > 0 and query.bottom < original_count:
         working_dataframe = working_dataframe.withColumn("index", monotonically_increasing_id())
 
         top_dataframe = working_dataframe.limit(query.top)
