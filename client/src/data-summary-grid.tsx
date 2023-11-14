@@ -4,7 +4,7 @@ import {Table} from "antd";
 import {useAppSelector} from "./hooks";
 import {DrillDownPathNode} from "./domain";
 
-const url = 'http://127.0.0.1:5001/data/query3';
+const url = 'http://127.0.0.1:5001/query';
 
 interface QueryFilterDto {
     column: string,

@@ -1,19 +1,15 @@
-import logging
+from enum import Enum
 
 from fastapi import FastAPI, Depends, Request, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.logger import logger
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-
-from typing import Optional, List
-from enum import Enum
 
 from pydantic import BaseModel
 
-from pyspark.context import SparkContext
-from pyspark.sql.session import SparkSession
 from pyspark.sql.functions import *
+from pyspark.sql.session import SparkSession
 
 app = FastAPI()
 
@@ -77,78 +73,7 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
-
-
-@app.get("/data")
-async def data(spark: SparkSession = Depends(get_spark_session)):
-    df = get_dataframe(spark)
-    return df.toJSON().collect()
-
-
-@app.get("/data/count")
-async def data(spark: SparkSession = Depends(get_spark_session)):
-    df = get_dataframe(spark)
-    return df.count()
-
-
-@app.get("/data/schema")
-async def data(spark: SparkSession = Depends(get_spark_session)):
-    df = get_dataframe(spark)
-    return df.schema.json()
-
-
-@app.get("/data/query1")
-async def data(spark: SparkSession = Depends(get_spark_session)):
-    df = get_dataframe(spark)
-    finalDataframe = df.groupby("country", "year").count().orderBy("country", "year")
-    sparkData = finalDataframe.toJSON().collect()
-    return {
-        "data": sparkData,
-        "columns": finalDataframe.columns,
-        "allColumns": df.columns
-    }
-
-
-@app.get("/data/query/{column}")
-async def data(column: str, spark: SparkSession = Depends(get_spark_session)):
-    df = get_dataframe(spark)
-    finalDataframe = df.groupby(column).count().orderBy(column)
-    sparkData = finalDataframe.toJSON().collect()
-    return {
-        "data": sparkData,
-        "columns": finalDataframe.columns,
-        "allColumns": df.columns
-    }
-
-
-@app.get("/data/filteredQuery/{column}")
-async def dataWithFilter(column: str, filterColumn: str, filterValue: str, spark: SparkSession = Depends(get_spark_session)):
-    df = get_dataframe(spark)
-    finalDataframe = df.filter(filterColumn + "=='" + filterValue + "'").groupby(column).count().orderBy(column)
-    sparkData = finalDataframe.toJSON().collect()
-    return {
-        "data": sparkData,
-        "columns": finalDataframe.columns,
-        "allColumns": df.columns
-    }
-
-
-@app.get("/data/query2/{athlete}")
-async def data(athlete: str, spark: SparkSession = Depends(get_spark_session)):
-    df = get_dataframe(spark)
-    finalDataframe = df.filter(col("athlete") == f"{athlete}").groupby("country").count()
-    sparkData = finalDataframe.toJSON().collect()
-    return {
-        "data": sparkData,
-        "columns": finalDataframe.columns,
-        "allColumns": df.columns
-    }
-
-
-@app.post("/data/query3")
+@app.post("/query")
 async def data(query: Query, spark: SparkSession = Depends(get_spark_session)):
     df = get_dataframe(spark)
     working_dataframe = df
