@@ -1,0 +1,33 @@
+{
+  "data": [
+    "{\"country\":\"United States\",\"sport\":\"Triathlon\",\"sum(gold)\":0,\"sum(silver)\":0,\"sum(bronze)\":1,\"sum(total)\":1}",
+    "{\"country\":\"Germany\",\"sport\":\"Figure Skating\",\"sum(gold)\":0,\"sum(silver)\":0,\"sum(bronze)\":2,\"sum(total)\":2}",
+    "{\"country\":\"Germany\",\"sport\":\"Archery\",\"sum(gold)\":0,\"sum(silver)\":0,\"sum(bronze)\":3,\"sum(total)\":3}",
+    "{\"country\":\"Germany\",\"sport\":\"Boxing\",\"sum(gold)\":0,\"sum(silver)\":0,\"sum(bronze)\":3,\"sum(total)\":3}",
+    "{\"country\":\"United States\",\"sport\":\"Curling\",\"sum(gold)\":0,\"sum(silver)\":0,\"sum(bronze)\":4,\"sum(total)\":4}",
+    "{\"country\":\"middle\",\"sport\":\"middle\",\"sum(gold)\":484,\"sum(silver)\":495,\"sum(bronze)\":440,\"sum(total)\":1419}",
+    "{\"country\":\"United States\",\"sport\":\"Athletics\",\"sum(gold)\":69,\"sum(silver)\":51,\"sum(bronze)\":27,\"sum(total)\":147}",
+    "{\"country\":\"United States\",\"sport\":\"Basketball\",\"sum(gold)\":83,\"sum(silver)\":0,\"sum(bronze)\":12,\"sum(total)\":95}",
+    "{\"country\":\"United States\",\"sport\":\"Swimming\",\"sum(gold)\":139,\"sum(silver)\":77,\"sum(bronze)\":51,\"sum(total)\":267}"
+  ],
+  "columns": [
+    "country",
+    "sport",
+    "sum(gold)",
+    "sum(silver)",
+    "sum(bronze)",
+    "sum(total)"
+  ],
+  "allColumns": [
+    "athlete",
+    "age",
+    "country",
+    "year",
+    "sport",
+    "gold",
+    "silver",
+    "bronze",
+    "total"
+  ],
+  "originalCount": 77
+}

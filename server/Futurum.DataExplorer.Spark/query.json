@@ -1,0 +1,21 @@
+{
+  "drilledColumn": "country",
+  "aggregateColumns": [
+    "gold",
+    "silver",
+    "bronze",
+    "total"
+  ],
+  "filters": [
+    {
+      "column": "country",
+      "type": "inFilter",
+      "values": [
+        "United States",
+        "Germany"
+      ]
+    }
+  ],
+  "top": 5,
+  "bottom": 3
+}
